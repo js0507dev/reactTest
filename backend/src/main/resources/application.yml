@@ -1,0 +1,17 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://js0507dev.iptime.org:53306/spring
+    username: myid
+    password: test
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  messages:
+    basename: i18n/exception
+    encoding: UTF-8
+  jwt:
+    secret: js0507dev!@34
