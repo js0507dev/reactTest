@@ -1,5 +1,6 @@
 package com.ls.lsblogsjs.backend.config;
 
+import lombok.extern.slf4j.Slf4j;
 import net.rakugakibox.util.YamlResourceBundle;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+@Slf4j
 @Configuration
 public class MessageConfiguration implements WebMvcConfigurer {
   @Bean
@@ -35,6 +37,7 @@ public class MessageConfiguration implements WebMvcConfigurer {
     registry.addInterceptor(localeChangeInterceptor());
   }
 
+  @Bean
   public MessageSource messageSource(
           @Value("${spring.messages.basename}") String basename,
           @Value("${spring.messages.encoding}") String encoding) {

@@ -28,7 +28,7 @@ public class UserEntity implements UserDetails {
   private String uid;
   @Column(nullable = false)
   private String nickname;
-  @Column(nullable = false, length = 60)
+  @Column(nullable = false)
   private String password;
 
   @ElementCollection(fetch = FetchType.EAGER)
