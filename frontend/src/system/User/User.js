@@ -1,8 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import Storage from '../Storage/Storage'
-
-class User extends React.Component {
+class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,47 +11,43 @@ class User extends React.Component {
             token: '',
         };
     }
-    onLogin(props) {
-        if(!props.id || props.id == '') {
+    
+    onLogin: (uid, password) => {
+        if(uid && uid === '') {
             alert("아이디를 입력해주세요.");
         }
-        if(!props.password || props.password == '') {
+        if(password && password === '') {
             alert("비밀번호를 입력해주세요.");
         }
-        const params = {
-            uid: props.id,
-            password: props.password
-        };
+        const params = JSON.stringify({
+            uid: uid,
+            password: password
+        });
         
-        fetch("http://localhost:9090/users/signin",
+        fetch("http://localhost:9090/users/signin", {
             method: 'POST',
             mode: 'no-cors',
-            body: JSON.stringify(params)
-        )
+            body: params
+        })
         .then(res => res.json())
         .then(
             (result) => {
-                this.setState({
-                    id: result.uid,
-                });
+                let test = atob(result.data);
+                console.log(test);
             },
             (error) => {
             }
         )
     }
-    onLogout() {
-        this.setState({
-            isLoggedin: false,
-            id: '',
-            name: '',
-            avatarSrc: '',
-            token: '',
+    onLogout: () => {
+        setIsLoggedin(false);
+        setInfo({
+            id:'',
+            name:'',
+            avatarSrc:'',
+            token:'',
         });
     }
-    render() {
-        return(
-        );
-    }
-}
+};
 
 export default User;
