@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Table(name = "user")
 public class UserEntity implements UserDetails {
-  @Id
+	private static final long serialVersionUID = 1L;
+@Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   @Column(nullable = false, unique = true, length = 150)
