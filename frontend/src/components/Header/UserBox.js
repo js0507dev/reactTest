@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import InputIcon from '@material-ui/icons/Input';
-
+import Avatar from '@material-ui/core/Avatar';
 
 class UserBox extends React.Component {
     constructor(props) {
@@ -10,6 +9,7 @@ class UserBox extends React.Component {
         this.handleLogoutClick = this.handleLogoutClick.bind(this);
         this.state = {
             isLoggedin: false,
+            avatarSrc: '',
         };
     }
     
@@ -21,25 +21,36 @@ class UserBox extends React.Component {
         );
     };
     renderUserGreeting() {
-        return (
-            <Avatar
-                alt=""
-                src=""
-                onClick={this.handleLoginClick}
-            />
-        );
+        let avatar = null;
+        const avatarSrc = this.state.avatarSrc;
+        if(avatarSrc == "") {
+            avatar = (
+                <Avatar
+                    onClick={this.handleLogoutClick}
+                >T</Avatar>
+            );
+        } else {
+            avatar = (
+                <Avatar
+                    alt="T"
+                    src="/public/images/avatar/1.jpg"
+                    onClick={this.handleLogoutClick}
+                ></Avatar>
+            );
+        }
+        return avatar;
     };
     handleLoginClick() {
-        alert('test');
+        alert('test111');
     };
     handleLogoutClick() {
-        alert('test');
+        alert('test222');
     };
     render() {
         const isLoggedin = this.state.isLoggedin;
         let userBox = null;
         if(isLoggedin) {
-            userBox = null;
+            userBox = this.renderUserGreeting();
         } else {
             userBox = this.renderGuestGreeting();
         }
