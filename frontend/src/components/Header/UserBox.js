@@ -1,24 +1,17 @@
 import React, { Component } from 'react';
 import InputIcon from '@material-ui/icons/Input';
 import Avatar from '@material-ui/core/Avatar';
-import axios from 'axios';
 
-//import User from '../../system/User/User';
+import * as User from './../../system/User/User';
 
 class UserBox extends React.Component {
     constructor(props) {
         super(props);
         this.handleLoginClick = this.handleLoginClick.bind(this);
         this.handleLogoutClick = this.handleLogoutClick.bind(this);
+        this.changeUserInfo = this.changeUserInfo.bind(this);
         this.state = {
-            isLoggedin: false,
-            userInfo: {
-                id: '',
-                name: '',
-                avatarSrc: '',
-                token: '',
-                roles: [],
-            },
+            userInfo: new Object()
         };
     }
     
@@ -32,7 +25,7 @@ class UserBox extends React.Component {
     renderUserGreeting() {
         let avatar = null;
         const avatarSrc = this.state.userInfo.avatarSrc;
-        if(avatarSrc == "") {
+        if(this.state.userInfo && avatarSrc == "" || avatarSrc == null) {
             avatar = (
                 <Avatar
                     onClick={this.handleLogoutClick}
@@ -42,7 +35,7 @@ class UserBox extends React.Component {
             avatar = (
                 <Avatar
                     alt="T"
-                    src="/public/images/avatar/1.jpg"
+                    src={this.state.userInfo.avatarSrc}
                     onClick={this.handleLogoutClick}
                 ></Avatar>
             );
@@ -56,61 +49,24 @@ class UserBox extends React.Component {
         testObj.uid = "test1";
         testObj.password = "test1";
         
-        const formData = new FormData();
-        for(const name in testObj) {
-            formData.append(name,testObj[name]);
-        }
-        
-        axios({
-            method: 'post',
-            url:"http://localhost:8080/users/signin",
-            data: formData,
-            headers: {
-                'Context-Type':'multipart/form-data;charset=utf-8',
-                'Access-Control-Allow-Origin':'*'
-            }
-        })
-        .then(
-            (result) => {
-                const userToken = result.data.data;
-                let newUserInfo = this.state.userInfo;
-                
-                const decodeToken = userToken.split('\.');
-                let resInfo = JSON.parse(window.atob(decodeToken[1]));
-                
-                newUserInfo.token = userToken;
-                newUserInfo.id = resInfo.sub;
-                newUserInfo.roles = resInfo.roles;
-                
-                this.setState({
-                    userInfo: newUserInfo,
-                    isLoggedin: true
-                });
-            }
-        )
-        .catch(
-            (error) => {
-                alert("error test + " + error);
-            }
-        );
+        User.loginAction(testObj,this.changeUserInfo);
     };
     handleLogoutClick() {
         alert('test222');
+        User.logoutAction();
         this.setState({
-            userInfo: {
-                id: '',
-                name: '',
-                avatarSrc: '',
-                token: '',
-                roles: [],
-            },
-            isLoggedin: false
+            userInfo: new Object()
         });
     };
+    changeUserInfo(newUserInfo) {
+        this.setState({
+            userInfo: newUserInfo
+        });
+    }
     render() {
-        const isLoggedin = this.state.isLoggedin;
+        const userInfo = this.state.userInfo;
         let userBox = null;
-        if(isLoggedin) {
+        if(userInfo && userInfo.isLoggedin) {
             userBox = this.renderUserGreeting();
         } else {
             userBox = this.renderGuestGreeting();
