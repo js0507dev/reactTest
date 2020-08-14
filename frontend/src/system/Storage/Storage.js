@@ -22,7 +22,7 @@ class LocalStorage extends React.Component {
             }
         }
         catch(e) {}
-        return new Object();
+        return {};
     }
     static getListItem(key) {
         try {
@@ -33,7 +33,7 @@ class LocalStorage extends React.Component {
             }
         }
         catch(e) {}
-        return new Array();
+        return [];
     }
     
     static setTextItem(key, value) {
@@ -91,7 +91,7 @@ class SessionStorage extends React.Component {
             }
         }
         catch(e) {}
-        return new Object();
+        return {};
     }
     static getListItem(key) {
         try {
@@ -102,7 +102,7 @@ class SessionStorage extends React.Component {
             }
         }
         catch(e) {}
-        return new Array();
+        return [];
     }
     
     static setTextItem(key, value) {

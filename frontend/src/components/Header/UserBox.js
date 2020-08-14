@@ -1,31 +1,32 @@
 import React, { Component } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import InputIcon from '@material-ui/icons/Input';
-import Avatar from '@material-ui/core/Avatar';
+import { Avatar, Link } from '@material-ui/core';
 
-import * as User from './../../system/User/User';
+import * as User from 'system/User/User';
 
-class UserBox extends React.Component {
+class UserBox extends Component {
     constructor(props) {
         super(props);
         this.handleLoginClick = this.handleLoginClick.bind(this);
         this.handleLogoutClick = this.handleLogoutClick.bind(this);
         this.changeUserInfo = this.changeUserInfo.bind(this);
         this.state = {
-            userInfo: new Object()
+            userInfo: {}
         };
     }
     
     renderGuestGreeting() {
         return (
-            <InputIcon
-                onClick={this.handleLoginClick}
-            />
+            <Link color="inherit" component={RouterLink} to="/login">
+                <InputIcon/>
+            </Link>
         );
     };
     renderUserGreeting() {
         let avatar = null;
         const avatarSrc = this.state.userInfo.avatarSrc;
-        if(this.state.userInfo && avatarSrc == "" || avatarSrc == null) {
+        if(avatarSrc === "" || avatarSrc === null) {
             avatar = (
                 <Avatar
                     onClick={this.handleLogoutClick}
@@ -45,7 +46,7 @@ class UserBox extends React.Component {
     handleLoginClick() {
         alert('test111');
         
-        let testObj = new Object();
+        let testObj = {};
         testObj.uid = "test1";
         testObj.password = "test1";
         
@@ -55,7 +56,7 @@ class UserBox extends React.Component {
         alert('test222');
         User.logoutAction();
         this.setState({
-            userInfo: new Object()
+            userInfo: {}
         });
     };
     changeUserInfo(newUserInfo) {

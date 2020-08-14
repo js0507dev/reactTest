@@ -1,7 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
+import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Link } from '@material-ui/core';
 
 import { useStyles } from './styles'
 import UserBox from './UserBox'
@@ -21,14 +23,16 @@ function Header() {
                 >
                     <MenuIcon />
                 </IconButton>
-                <Typography
-                    component="h1"
-                    variant="h6"
-                    noWrap
-                    className={classes.title}
-                >
-                    LS BLOG SJS
-                </Typography>
+                    <Typography
+                        component="h1"
+                        variant="h6"
+                        noWrap
+                        className={classes.title}
+                    >
+                        <Link color="inherit" component={RouterLink} to="/">
+                            TEST
+                        </Link>
+                    </Typography>
                 <UserBox />
             </Toolbar>
         </AppBar>

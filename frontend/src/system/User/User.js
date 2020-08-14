@@ -1,7 +1,6 @@
-import React from 'react';
 import axios from 'axios';
 
-import {LocalStorage, SessionStorage} from '../Storage/Storage'
+import {/*LocalStorage, */SessionStorage} from 'system/Storage/Storage'
 
 export function loginAction(props, callback) {
     const uid = props.uid;
@@ -30,9 +29,9 @@ export function loginAction(props, callback) {
     .then(
         (result) => {
             const userToken = result.data.data;
-            let newUserInfo = new Object();
+            let newUserInfo = {};
             
-            const decodeToken = userToken.split('\.');
+            const decodeToken = userToken.split('.');
             let resInfo = JSON.parse(window.atob(decodeToken[1]));
             
             newUserInfo.token = userToken;
@@ -41,7 +40,6 @@ export function loginAction(props, callback) {
             newUserInfo.isLoggedin = true;
             
             SessionStorage.setObjectItem('userInfo',newUserInfo);
-            callback(newUserInfo);
         }
     )
     .catch(
@@ -49,6 +47,10 @@ export function loginAction(props, callback) {
             alert("error test + " + error);
         }
     );
+}
+
+export function loginSuccess() {
+    
 }
 
 export function logoutAction() {
@@ -82,7 +84,7 @@ export function getUserInfoAction() {
     
     axios({
         method: 'get',
-        url:"http://localhost:8080/users/${userInfo.id}",
+        url:`http://localhost:8080/users/${userInfo.id}`,
         headers: {
             'Context-Type':'multipart/form-data;charset=utf-8',
             'Access-Control-Allow-Origin':'*'
