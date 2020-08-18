@@ -105,7 +105,7 @@ class SessionStorage extends React.Component {
         return [];
     }
     
-    static setTextItem(key, value) {
+    static setItem(key, value) {
         try {
             window.sessionStorage.setItem(key, value);
             return true;

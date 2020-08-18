@@ -3,13 +3,54 @@ import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link } from '@material-ui/core';
+import InputIcon from '@material-ui/icons/Input';
+import { Avatar, Link } from '@material-ui/core';
 
 import { useStyles } from './styles'
-import UserBox from './UserBox'
 
-function Header() {
+function Header(props) {
     const classes = useStyles();
+    const { isLoggedin, user, logout } = props;
+    
+    function handleLogoutClick() {
+        logout();
+    }
+    function renderUser() {
+        let avatar = null;
+        const avatarSrc = user.avatarSrc;
+        if(avatarSrc === "" || avatarSrc === null) {
+            avatar = (
+                <Avatar
+                    onClick={handleLogoutClick}
+                >T</Avatar>
+            );
+        } else {
+            avatar = (
+                <Avatar
+                    alt="T"
+                    src={user.avatarSrc}
+                    onClick={handleLogoutClick}
+                ></Avatar>
+            );
+        }
+        return avatar;
+    }
+    
+    function renderGuest() {
+        return (
+            <Link color="inherit" component={RouterLink} to="/login">
+                <InputIcon/>
+            </Link>
+        );
+    }
+    
+    let userBox = null;
+    if(user && isLoggedin) {
+        userBox = renderUser();
+    } else {
+        userBox = renderGuest();
+    }
+    
     return (
         <AppBar
             position="fixed"
@@ -33,7 +74,7 @@ function Header() {
                             TEST
                         </Link>
                     </Typography>
-                <UserBox />
+                {userBox}
             </Toolbar>
         </AppBar>
     );

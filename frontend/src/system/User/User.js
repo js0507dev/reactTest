@@ -1,115 +1,90 @@
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
 import {/*LocalStorage, */SessionStorage} from 'system/Storage/Storage'
 
-export function loginAction(props, callback) {
-    const uid = props.uid;
-    const password = props.password;
+function User() {
     
-    if(uid && uid === '') {
-        alert("아이디를 입력해주세요.");
-    }
-    if(password && password === '') {
-        alert("비밀번호를 입력해주세요.");
-    }
-    
-    const formData = new FormData();
-    formData.append("uid",uid);
-    formData.append("password",password);
-    
-    axios({
-        method: 'post',
-        url:"http://localhost:8080/users/signin",
-        data: formData,
-        headers: {
-            'Context-Type':'multipart/form-data;charset=utf-8',
-            'Access-Control-Allow-Origin':'*'
+    function logoutAction() {
+        if(!checkLogin()) {
+            alert("로그인 정보가 없습니다.");
+            return false;
         }
-    })
-    .then(
-        (result) => {
-            const userToken = result.data.data;
-            let newUserInfo = {};
-            
-            const decodeToken = userToken.split('.');
-            let resInfo = JSON.parse(window.atob(decodeToken[1]));
-            
-            newUserInfo.token = userToken;
-            newUserInfo.id = resInfo.sub;
-            newUserInfo.roles = resInfo.roles;
-            newUserInfo.isLoggedin = true;
-            
-            SessionStorage.setObjectItem('userInfo',newUserInfo);
-        }
-    )
-    .catch(
-        (error) => {
-            alert("error test + " + error);
-        }
-    );
-}
+        SessionStorage.removeItem('token');
+        return true;
+    }
 
-export function loginSuccess() {
+    function checkLogin() {
+        const token = SessionStorage.getItem('token');
+        if(token === null || token === '') {
+            return false;
+        }
+        const uid = SessionStorage.getItem('uid');
+        if(uid === null || uid === '') {
+            return false;
+        }
+        return true;
+    }
+
+    function getUserInfoAction() {
+        if(!checkLogin()) {
+            alert("로그인 정보가 없습니다.");
+            return false;
+        }
+        
+        const uid = SessionStorage.getItem('uid');
+        
+        axios({
+            method: 'get',
+            url:`http://localhost:8080/users/${uid}`,
+            headers: {
+                'Context-Type':'multipart/form-data;charset=utf-8',
+                'Access-Control-Allow-Origin':'*'
+            }
+        })
+        .then(
+            (result) => {
+                // TODO: 사용자정보 가져오기
+                /*const userToken = result.data.data;
+                let newUserInfo = SessionStorage.getObjectItem('userInfo');
+                
+                const decodeToken = userToken.split('\.');
+                let resInfo = JSON.parse(window.atob(decodeToken[1]));
+                
+                newUserInfo.token = userToken;
+                newUserInfo.id = resInfo.sub;
+                newUserInfo.roles = resInfo.roles;
+                newUserInfo.isLoggedin = true;
+                
+                SessionStorage.setObjectItem('userInfo',newUserInfo);*/
+            }
+        )
+        .catch(
+            (error) => {
+                alert("error test + " + error);
+            }
+        );
+    }
     
-}
-
-export function logoutAction() {
-    if(!checkLogin()) {
-        alert("먼저 로그인을 해주세요.");
-        return false;
-    }
-    SessionStorage.removeItem('userInfo');
-}
-
-export function getLoginUser() {
-    if(checkLogin()) {
-        return SessionStorage.getObjectItem('userInfo');
-    }
     return null;
 }
 
-export function checkLogin() {
-    const userInfo = SessionStorage.getObjectItem('userInfo');
-    if(userInfo.isLoggedin) {
-        return true;
-    }
-    return false;
+function useUserInfo() {
+    const [state, setState] = useState({
+        uid: '',
+        name: '',
+        token: '',
+        avatarSrc: '',
+    });
+    
+    setState({
+        uid: SessionStorage.getItem('uid'),
+        name: SessionStorage.getItem('name'),
+        token: SessionStorage.getItem('token'),
+        avatarSrc: SessionStorage.getItem('avatarSrc'),
+    });
+    
+    return [state, setState];
 }
 
-export function getUserInfoAction() {
-    const userInfo = getLoginUser();
-    if(!userInfo) {
-        return false;
-    }
-    
-    axios({
-        method: 'get',
-        url:`http://localhost:8080/users/${userInfo.id}`,
-        headers: {
-            'Context-Type':'multipart/form-data;charset=utf-8',
-            'Access-Control-Allow-Origin':'*'
-        }
-    })
-    .then(
-        (result) => {
-            // TODO: 사용자정보 가져오기
-            /*const userToken = result.data.data;
-            let newUserInfo = SessionStorage.getObjectItem('userInfo');
-            
-            const decodeToken = userToken.split('\.');
-            let resInfo = JSON.parse(window.atob(decodeToken[1]));
-            
-            newUserInfo.token = userToken;
-            newUserInfo.id = resInfo.sub;
-            newUserInfo.roles = resInfo.roles;
-            newUserInfo.isLoggedin = true;
-            
-            SessionStorage.setObjectItem('userInfo',newUserInfo);*/
-        }
-    )
-    .catch(
-        (error) => {
-            alert("error test + " + error);
-        }
-    );
-}
+export {User as User, useUserInfo as useUserInfo};
