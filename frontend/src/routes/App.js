@@ -1,78 +1,84 @@
 import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import axios from 'axios';
+import { CssBaseline, Container } from '@material-ui/core';
 
 import GlobalThemeProvider from 'components/GlobalTheme/GlobalTheme';
+import { useStyles } from 'pages/globalStyles'
 import Header from 'components/Header/Header';
+import SideMenu from 'components/SideMenu/SideMenu';
 import { Main, Login } from 'pages';
 import AuthRoute from './AuthRoute';
-import { SessionStorage } from 'system/Storage/Storage';
+import * as User from 'system/User/User';
 
-function App() {
+function useConstructor(callBack = () => {}) {
+    const [hasBeenCalled, setHasBeenCalled] = useState(false);
+    if (hasBeenCalled) return;
+    callBack();
+    setHasBeenCalled(true);
+}
+
+function App(props) {
     const [user, setUser] = useState(null);
+    const [open, setOpen] = useState(true);
     const isLoggedin = user != null;
     
-    const login = ({uid, password}) => {
-        const formData = new FormData();
-        formData.append("uid",uid);
-        formData.append("password",password);
-        
-        axios({
-            method: 'post',
-            url:"http://localhost:8080/users/signin",
-            data: formData,
-            headers: {
-                'Context-Type':'multipart/form-data;charset=utf-8',
-                'Access-Control-Allow-Origin':'*'
-            }
-        })
-        .then(
-            (result) => {
-                const success = result.data.success;
-                if(success) {
-                    const userToken = result.data.data;
-                    const decodeToken = userToken.split('.');
-                    let resInfo = JSON.parse(window.atob(decodeToken[1]));
-                    
-                    const newUser = {
-                        id: resInfo.sub,
-                        uid: uid,
-                        roles: resInfo.roles,
-                        token: userToken,
-                    };
-                    
-                    SessionStorage.setObjectItem('user',newUser);
-                    setUser(newUser);
-                } else {
-                    alert(`[${result.data.code}] : ${result.data.msg}`);
-                }
-            }
-        )
-        .catch(error => {
-            alert(`[${error.response.data.code}] : ${error.response.data.msg}`);
+    useConstructor(() => {
+        //최초실행
+        const rememberUser = User.getLoginInfo();
+        if(rememberUser) {
+            setUser(rememberUser);
+        }
+    });
+    
+    const login = ({uid, password, remember}) => {
+        User.login({uid, password, remember})
+        .then( newUser => {
+            setUser(newUser);
+        },
+        errMsg => {
+            alert(errMsg);
         });
     };
     
     const logout = () => {
-        alert("logout 했어요");
+        User.logout();
         setUser(null);
     };
     
+    const toggleSideMenu = () => {
+        setOpen(!open);
+    }
+    
+    const classes = useStyles();
+    
     return (
         <GlobalThemeProvider>
-            <CssBaseline />
-            <Header isLoggedin={isLoggedin} user={user} logout={logout} />
-            <Route exact path="/" render={
-                props => (
-                    <Main isLoggedin={isLoggedin} logout={logout} {...props} />
-                )
-            }/>
-            <Route path="/login" render={
-                props => (
-                    <Login isLoggedin={isLoggedin} login={login} {...props} />
-                )
-            }/>
+            <div className={classes.root}>
+                <CssBaseline />
+                <Header
+                    isLoggedin={isLoggedin}
+                    user={user}
+                    logout={logout}
+                    open={open}
+                    toggleSideMenu={toggleSideMenu}
+                />
+                <SideMenu open={open} toggleSideMenu={toggleSideMenu} />
+                <main className={classes.content}>
+                    <div className={classes.headerSpacer} />
+                    <Container maxWidth="lg" className={classes.container}>
+                        <Route exact path="/" render={
+                            props => (
+                                <Main isLoggedin={isLoggedin} logout={logout} {...props} />
+                            )
+                        }/>
+                        <Route path="/login" render={
+                            props => (
+                                <Login isLoggedin={isLoggedin} login={login} {...props} />
+                            )
+                        }/>
+                    </Container>
+                </main>
+            </div>
         </GlobalThemeProvider>
     );
 }

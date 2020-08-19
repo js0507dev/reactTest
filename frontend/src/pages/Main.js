@@ -4,20 +4,17 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { useStyles } from './globalStyles'
 
-class Main extends Component {
-    render() {
-        const { classes } = this.props;
-        return (
-            <div className="root">
-                <main>
-                    <div className={classes.headerSpacer} />
-                    <Container maxWidth="lg">
-                        testtwaetasetase
-                    </Container>
-                </main>
-            </div>
-        );
-    }
+function Main() {
+    const classes = useStyles();
+    return (
+        <div className={classes.root}>
+            <main>
+                <Container maxWidth="lg">
+                    testtwaetasetase
+                </Container>
+            </main>
+        </div>
+    );
 }
 
-export default withStyles(useStyles)(Main);
+export default Main;

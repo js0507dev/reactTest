@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -13,12 +13,8 @@ import {
     Grid
     } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import axios from 'axios';
 
-import { useStyles as GlobalStyles } from 'pages/globalStyles'
 import { useStyles } from './styles'
-import {/*LocalStorage, */SessionStorage} from 'system/Storage/Storage'
-import User from 'system/User/User';
 
 function Login(props) {
     const [state, setState] = useState({
@@ -38,7 +34,8 @@ function Login(props) {
         
         const uid = document.getElementById('uid').value;
         const password = document.getElementById('password').value;
-        props.login({uid, password});
+        const remember = document.getElementById('remember').checked;
+        props.login({uid, password, remember});
     }
     function handleTextBlur(e) {
         const check = validation(e.target.id);
@@ -103,7 +100,6 @@ function Login(props) {
     return (
         <Container component="main" maxWidth="xs">
             <main className={classes.main}>
-                <div className={classes.headerSpacer} />
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon/>
                 </Avatar>
@@ -140,7 +136,7 @@ function Login(props) {
                         onBlur={(e) => handleTextBlur(e)}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" fontSize="small" />}
+                        control={<Checkbox name="remember" id="remember" value="remember" color="primary" fontSize="small" />}
                         label={<Typography variant="body2" color="primary">로그인 상태 유지</Typography>}
                     />
                     <Button
@@ -171,4 +167,4 @@ function Login(props) {
     );
 }
 
-export default withStyles(GlobalStyles)(withStyles(useStyles)(Login));
+export default withStyles(useStyles)(Login);

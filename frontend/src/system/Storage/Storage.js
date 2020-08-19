@@ -3,14 +3,14 @@ import React from 'react'
 class LocalStorage extends React.Component {
     static getItem(key) {
         const value = window.localStorage.getItem(key);
-        return (value ? value : "")
+        return value;
     }
     static getNumberItem(key) {
         try {
             const item = window.localStorage.getItem(key);
             return Number(item);
         } catch(e) {
-            return 0;
+            return null;
         }
     }
     static getObjectItem(key) {
@@ -22,7 +22,7 @@ class LocalStorage extends React.Component {
             }
         }
         catch(e) {}
-        return {};
+        return null;
     }
     static getListItem(key) {
         try {
@@ -33,10 +33,10 @@ class LocalStorage extends React.Component {
             }
         }
         catch(e) {}
-        return [];
+        return null;
     }
     
-    static setTextItem(key, value) {
+    static setItem(key, value) {
         try {
             window.localStorage.setItem(key, value);
             return true;
@@ -72,14 +72,14 @@ class LocalStorage extends React.Component {
 class SessionStorage extends React.Component {
     static getItem(key) {
         const value = window.sessionStorage.getItem(key);
-        return (value ? value : "")
+        return value;
     }
     static getNumberItem(key) {
         try {
             const item = window.sessionStorage.getItem(key);
             return Number(item);
         } catch(e) {
-            return 0;
+            return null;
         }
     }
     static getObjectItem(key) {
@@ -91,7 +91,7 @@ class SessionStorage extends React.Component {
             }
         }
         catch(e) {}
-        return {};
+        return null;
     }
     static getListItem(key) {
         try {
@@ -102,7 +102,7 @@ class SessionStorage extends React.Component {
             }
         }
         catch(e) {}
-        return [];
+        return null;
     }
     
     static setItem(key, value) {

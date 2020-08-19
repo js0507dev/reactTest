@@ -1,10 +1,54 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import { LocalStorage, SessionStorage } from 'system/Storage/Storage'
+import { LoginAction } from './actions';
 
-import {/*LocalStorage, */SessionStorage} from 'system/Storage/Storage'
-
-function User() {
+export const getLoginInfo = () => {
+    const localUser = LocalStorage.getObjectItem('user');
+    const sessionUser = SessionStorage.getObjectItem('user');
+    let user = localUser || sessionUser;
+    if(localUser) {
+        if(!sessionUser) {
+            SessionStorage.setObjectItem('user',localUser);
+        }
+    }
+    console.log("test1: "+localUser);
+    console.log("test2: "+sessionUser);
     
+    return user;
+};
+
+export const login = ({uid,password,remember}) => {
+    //storage에 로그인정보 있는지 확인
+    const oldUser = getLoginInfo();
+    if(oldUser) {
+        return new Promise(( resolve => resolve(oldUser) ));
+    }
+    
+    const formData = new FormData();
+    formData.append("uid",uid);
+    formData.append("password",password);
+    
+    return new Promise(function(resolve,reject) {
+        LoginAction(formData)
+        .then( newUser => {
+            SessionStorage.setObjectItem('user',newUser);
+    //로그인 유지 유무 확인
+            if(remember !== null && remember) {
+                LocalStorage.setObjectItem('user',newUser);
+            }
+            resolve(newUser);
+        },
+        errMsg => {
+            reject(errMsg);
+        });
+    });
+};
+
+export const logout = () => {
+    SessionStorage.removeItem('user');
+    LocalStorage.removeItem('user');
+};
+
+/*function User() {
     function logoutAction() {
         if(!checkLogin()) {
             alert("로그인 정보가 없습니다.");
@@ -56,7 +100,7 @@ function User() {
                 newUserInfo.roles = resInfo.roles;
                 newUserInfo.isLoggedin = true;
                 
-                SessionStorage.setObjectItem('userInfo',newUserInfo);*/
+                SessionStorage.setObjectItem('userInfo',newUserInfo);
             }
         )
         .catch(
@@ -69,22 +113,4 @@ function User() {
     return null;
 }
 
-function useUserInfo() {
-    const [state, setState] = useState({
-        uid: '',
-        name: '',
-        token: '',
-        avatarSrc: '',
-    });
-    
-    setState({
-        uid: SessionStorage.getItem('uid'),
-        name: SessionStorage.getItem('name'),
-        token: SessionStorage.getItem('token'),
-        avatarSrc: SessionStorage.getItem('avatarSrc'),
-    });
-    
-    return [state, setState];
-}
-
-export {User as User, useUserInfo as useUserInfo};
+export default User;*/
