@@ -1,7 +1,8 @@
 package com.ls.lsblogsjs.backend.exception;
 
 public class AuthenticationEntryPointException extends RuntimeException{
-  public AuthenticationEntryPointException(String msg, Throwable t) {
+	private static final long serialVersionUID = 1L;
+public AuthenticationEntryPointException(String msg, Throwable t) {
     super(msg, t);
   }
   public AuthenticationEntryPointException(String msg) {

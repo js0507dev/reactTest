@@ -34,6 +34,7 @@ public class UserController {
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
 
+  @SuppressWarnings("rawtypes")
   @ApiOperation(value = "로그인", notes = "회원 로그인한다.")
   @PostMapping("/signin")
   public SingleResult signin(@ApiParam(value = "회원 아이디 : email", required = true) @RequestParam String uid,

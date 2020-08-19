@@ -1,7 +1,9 @@
 package com.ls.lsblogsjs.backend.exception;
 
 public class UserNotFoundException extends RuntimeException {
-  public UserNotFoundException(String msg, Throwable t) {
+	private static final long serialVersionUID = 1L;
+
+public UserNotFoundException(String msg, Throwable t) {
     super(msg, t);
   }
 

@@ -1,7 +1,9 @@
 package com.ls.lsblogsjs.backend.exception;
 
 public class UserSignFailedException extends RuntimeException {
-  public UserSignFailedException(String msg, Throwable t) {
+	private static final long serialVersionUID = 1L;
+
+public UserSignFailedException(String msg, Throwable t) {
     super(msg, t);
   }
 
