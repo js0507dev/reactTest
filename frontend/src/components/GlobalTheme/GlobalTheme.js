@@ -1,35 +1,29 @@
 import React from 'react';
-import {createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import {createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
 const GlobalTheme = createMuiTheme({
     palette: {
         primary: {
-            light: "#F25C05",
-            main: "#023E73",
-            dark: "#021859",
-            text: "#F2F2F2",
+            light: "#9FA8DA",
+            main: "#3949AB",
+            dark: "#283593",
+            contrastText: "#FFFFFF",
         },
         secondary: {
-            light: '#123',
-            main: '#234',
-            dark: '#345',
-            tesxt: '#456',
+            light: '#FF8A33',
+            main: '#FF6D00',
+            dark: '#FA6700',
+            contrastText: '#000000',
         },
-        grayScale: {
-            100: "#1",
-            200: "#2",
-            300: "#3",
-            400: "#4",
-            500: "#5",
-            600: "#6",
-            700: "#7",
-            800: "#8",
+        text: {
+            primary: '#FFFFFF',
+            secondary: '#000000',
         },
     },
 });
 
 const GlobalThemeProvider = ({ children }) => (
-  <ThemeProvider theme={GlobalTheme}>{children}</ThemeProvider>
+  <MuiThemeProvider theme={GlobalTheme}>{children}</MuiThemeProvider>
 );
 
 export default GlobalThemeProvider;

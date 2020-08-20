@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '@material-ui/core/Container';
-import { withStyles } from '@material-ui/core/styles';
 
 import { useStyles } from './globalStyles'
 

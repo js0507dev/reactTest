@@ -2,13 +2,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export const drawerWidth = 240;
 export const useStyles = makeStyles((theme) => ({
-    toolbarIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-    },
     drawerPaper: {
         position: 'relative',
         whiteSpace: 'nowrap',
@@ -28,5 +21,12 @@ export const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9),
         },
+    },
+    toolbarIcon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
     },
 }));

@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
 import {
     Container,
     Avatar,
     Typography,
     TextField,
+    InputAdornment,
+    IconButton,
     FormControlLabel,
     Button,
     Checkbox,
@@ -13,22 +14,36 @@ import {
     Grid
     } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { useStyles } from './styles'
+import * as Constants from './Constants';
 
 function Login(props) {
-    const [state, setState] = useState({
-        isUidError: false,
-        uidErrorMsg: '',
-        isPasswordError: false,
-        passwordErrorMsg: '',
+    const [uidState, setUidState] = useState({
+        isError: false,
+        errorMsg: '',
     });
+    const [pwdState, setPwdState] = useState({
+        isError: false,
+        errorMsg: '',
+    });
+    const [showPassword, setShowPassword] = useState(false);
     //const login = props.login;
     
     function handleLoginClick() {
-        if(!validation()) {
-            if(!validation('uid')) setUidError();
-            if(!validation('password')) setPasswordError();
+        const validUid = validationUid();
+        const validPwd = validationPassword();
+        if(validUid !== '' || validPwd !== '') {
+            setUidState({
+                isError: (validUid !== ''),
+                errorMsg: validUid,
+            });
+            setPwdState({
+                isError: (validPwd !== ''),
+                errorMsg: validPwd,
+            });
             return false;
         }
         
@@ -38,59 +53,47 @@ function Login(props) {
         props.login({uid, password, remember});
     }
     function handleTextBlur(e) {
-        const check = validation(e.target.id);
-        if(!check && e.target.id === "uid") {
-            setUidError();
-        } else if(!check && e.target.id === "password") {
-            setPasswordError();
-        } else {
-            initErrorCheck();
+        if(e.target.id === "uid") {
+            const validUid = validationUid();
+            setUidState({
+                isError: (validUid !== ''),
+                errorMsg: validUid,
+            });
         }
-    }
-    function setUidError() {
-        setState({
-            isUidError: true,
-            uidErrorMsg: '아이디는 이메일형식(email@example.com) 입니다.',
-        });
-    }
-    function setPasswordError() {
-        setState({
-            isPasswordError: true,
-            passwordErrorMsg: '필수값입니다.',
-        });
-    }
-    function initErrorCheck() {
-        setState({
-            isUidError: false,
-            uidErrorMsg: '',
-            isPasswordError: false,
-            passwordErrorMsg: '',
-        });
-    }
-    function validation(gbn) {
-        let res = false;
-        if(gbn) {
-            if(gbn === 'uid') {
-                res = validationUid();
-            }
-            if(gbn === 'password') {
-                res = validationPassword();
-            }
-        } else {
-            res = (validationUid() && validationPassword())
+        if(e.target.id === "password") {
+            const validPwd = validationPassword();
+            setPwdState({
+                isError: (validPwd !== ''),
+                errorMsg: validPwd,
+            });
         }
-        return res;
     }
     function validationUid() {
         const uid = document.getElementById('uid').value;
-        return uid.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g);
+        const uidRequireChk = (uid !== '');
+        if(!uidRequireChk) {
+            return Constants.ERROR_MSG.uidRequire;
+        }
+        const uidRuleChk = uid.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g);
+        if(!uidRuleChk) {
+            return Constants.ERROR_MSG.uidRule;
+        }
+        return '';
     }
     function validationPassword() {
         const password = document.getElementById('password').value;
-        return !(password === '')
+        const pwdRequireChk = (password !== '');
+        if(!pwdRequireChk) {
+            return Constants.ERROR_MSG.passwordRequire;
+        }
+        return '';
+    }
+    function toggleVisibility() {
+        const show = !showPassword;
+        setShowPassword(show)
     }
     
-    const { classes } = props;
+    const classes = useStyles();
     
     const { from } = props.location.state || { from: { pathname: "/" } };
     if (props.isLoggedin) return (
@@ -108,7 +111,7 @@ function Login(props) {
                 </Typography>
                 <div>
                     <TextField
-                        error={state.isUidError}
+                        error={uidState.isError}
                         variant="outlined"
                         margin="normal"
                         required
@@ -117,23 +120,36 @@ function Login(props) {
                         label="아이디"
                         name="uid"
                         autoComplete="email"
-                        helperText={state.isUidError ? state.uidErrorMsg : "이메일형식(email@example.com)"}
+                        helperText={uidState.isError ? uidState.errorMsg : ""}
                         onBlur={(e) => handleTextBlur(e)}
                         autoFocus
                     />
                     <TextField
-                        error={state.isPasswordError}
+                        error={pwdState.isError}
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
                         name="password"
                         label="비밀번호"
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         id="password"
                         autoComplete="current-password"
-                        helperText={state.isPasswordError ? state.passwordErrorMsg : ""}
+                        helperText={pwdState.isError ? pwdState.errorMsg : ""}
                         onBlur={(e) => handleTextBlur(e)}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={toggleVisibility}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <FormControlLabel
                         control={<Checkbox name="remember" id="remember" value="remember" color="primary" fontSize="small" />}
@@ -167,4 +183,4 @@ function Login(props) {
     );
 }
 
-export default withStyles(useStyles)(Login);
+export default Login;

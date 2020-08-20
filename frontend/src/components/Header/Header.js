@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Drawer, Divider, TextField, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import InputIcon from '@material-ui/icons/Input';
 import { Avatar, Link } from '@material-ui/core';
@@ -56,7 +56,7 @@ function Header(props) {
             position="fixed"
             className={clsx(classes.appBar, open && classes.appBarShift)}
         >
-            <Toolbar className={clsx(classes.toolbar)}>
+            <Toolbar className={clsx(classes.toolbar)} >
                 <IconButton
                     aria-label="menu"
                     edge="start"

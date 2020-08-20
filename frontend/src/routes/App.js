@@ -19,7 +19,7 @@ function useConstructor(callBack = () => {}) {
 
 function App(props) {
     const [user, setUser] = useState(null);
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const isLoggedin = user != null;
     
     useConstructor(() => {

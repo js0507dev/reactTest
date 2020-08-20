@@ -1,4 +1,6 @@
-export const useStyles = theme => ({
+import { makeStyles } from "@material-ui/core/styles";
+
+export const useStyles = makeStyles((theme) => ({
     main: {
         marginTop: theme.spacing(8),
         display: 'flex',
@@ -15,4 +17,4 @@ export const useStyles = theme => ({
     loginCheck: {
         fontSize: '10px',
     },
-});
+}));
