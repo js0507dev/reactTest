@@ -1,14 +1,13 @@
 import axios from 'axios';
 
 export default function LoginAction(formData) {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         axios({
             method: 'post',
             url:"http://localhost:8080/users/signin",
             data: formData,
             headers: {
                 'Context-Type':'multipart/form-data;charset=utf-8',
-                'Access-Control-Allow-Origin':'*'
             }
         })
         .then(
@@ -32,7 +31,10 @@ export default function LoginAction(formData) {
             }
         )
         .catch(error => {
-            const msg = error.response.data.msg || error;
+            const msg = error;
+            if(error.response) {
+                msg = error.response.data.msg;
+            }
             reject(msg);
         });
     });

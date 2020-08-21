@@ -31,6 +31,8 @@ public class UserEntity implements UserDetails {
   private String nickname;
   @Column(nullable = false)
   private String password;
+  @Column(nullable = true, length = 255)
+  private String avatarUrl;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @Builder.Default

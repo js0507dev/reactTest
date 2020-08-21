@@ -1,17 +1,15 @@
 import { LocalStorage, SessionStorage } from 'system/Storage/Storage'
-import { LoginAction } from './actions';
+import { LoginAction, UserInfoAction } from './actions';
 
 export const getLoginInfo = () => {
     const localUser = LocalStorage.getObjectItem('user');
     const sessionUser = SessionStorage.getObjectItem('user');
-    let user = localUser || sessionUser;
+    let user = sessionUser || localUser;
     if(localUser) {
         if(!sessionUser) {
             SessionStorage.setObjectItem('user',localUser);
         }
     }
-    console.log("test1: "+localUser);
-    console.log("test2: "+sessionUser);
     
     return user;
 };
@@ -27,11 +25,12 @@ export const login = ({uid,password,remember}) => {
     formData.append("uid",uid);
     formData.append("password",password);
     
-    return new Promise(function(resolve,reject) {
+    return new Promise((resolve,reject) => {
         LoginAction(formData)
         .then( newUser => {
             SessionStorage.setObjectItem('user',newUser);
-    //로그인 유지 유무 확인
+
+            //로그인 유지 유무 확인
             if(remember !== null && remember) {
                 LocalStorage.setObjectItem('user',newUser);
             }
@@ -48,69 +47,22 @@ export const logout = () => {
     LocalStorage.removeItem('user');
 };
 
-/*function User() {
-    function logoutAction() {
-        if(!checkLogin()) {
-            alert("로그인 정보가 없습니다.");
-            return false;
-        }
-        SessionStorage.removeItem('token');
-        return true;
-    }
-
-    function checkLogin() {
-        const token = SessionStorage.getItem('token');
-        if(token === null || token === '') {
-            return false;
-        }
-        const uid = SessionStorage.getItem('uid');
-        if(uid === null || uid === '') {
-            return false;
-        }
-        return true;
-    }
-
-    function getUserInfoAction() {
-        if(!checkLogin()) {
-            alert("로그인 정보가 없습니다.");
-            return false;
-        }
-        
-        const uid = SessionStorage.getItem('uid');
-        
-        axios({
-            method: 'get',
-            url:`http://localhost:8080/users/${uid}`,
-            headers: {
-                'Context-Type':'multipart/form-data;charset=utf-8',
-                'Access-Control-Allow-Origin':'*'
-            }
-        })
-        .then(
-            (result) => {
-                // TODO: 사용자정보 가져오기
-                /*const userToken = result.data.data;
-                let newUserInfo = SessionStorage.getObjectItem('userInfo');
-                
-                const decodeToken = userToken.split('\.');
-                let resInfo = JSON.parse(window.atob(decodeToken[1]));
-                
-                newUserInfo.token = userToken;
-                newUserInfo.id = resInfo.sub;
-                newUserInfo.roles = resInfo.roles;
-                newUserInfo.isLoggedin = true;
-                
-                SessionStorage.setObjectItem('userInfo',newUserInfo);
-            }
-        )
-        .catch(
-            (error) => {
-                alert("error test + " + error);
-            }
-        );
-    }
+export const getUserInfo = () => {
+    let oldUser = getLoginInfo();
     
-    return null;
+    return new Promise((resolve,reject) => {
+        UserInfoAction(oldUser.token, oldUser.id)
+        .then( userInfo => {
+            const myInfo = {
+                'nickname':userInfo.nickname,
+                'uid':userInfo.uid,
+                'avatarUrl':userInfo.avatarUrl,
+            };
+            
+            resolve(myInfo);
+        },
+        errMsg => {
+            reject(errMsg);
+        });
+    });
 }
-
-export default User;*/

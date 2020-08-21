@@ -1,0 +1,1 @@
+export {default as useConstructor} from './Constructor';

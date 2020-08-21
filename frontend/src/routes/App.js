@@ -9,13 +9,7 @@ import SideMenu from 'components/SideMenu/SideMenu';
 import { Main, Login } from 'pages';
 import AuthRoute from './AuthRoute';
 import * as User from 'system/User/User';
-
-function useConstructor(callBack = () => {}) {
-    const [hasBeenCalled, setHasBeenCalled] = useState(false);
-    if (hasBeenCalled) return;
-    callBack();
-    setHasBeenCalled(true);
-}
+import { useConstructor } from 'utils';
 
 function App(props) {
     const [user, setUser] = useState(null);

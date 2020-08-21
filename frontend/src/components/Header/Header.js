@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
@@ -6,34 +6,42 @@ import MenuIcon from '@material-ui/icons/Menu';
 import InputIcon from '@material-ui/icons/Input';
 import { Avatar, Link } from '@material-ui/core';
 
-import { useStyles } from './styles'
+import { useStyles } from './styles';
+import * as User from 'system/User/User';
 
 function Header(props) {
     const classes = useStyles();
     const { isLoggedin, user, logout, open, toggleSideMenu } = props;
+    const [userInfo,setUserInfo] = useState({
+        avatarUrl: '',
+        nickname: '',
+        uid: '',
+    });
     
     function handleLogoutClick() {
         logout();
     }
     function renderUser() {
         let avatar = null;
-        const avatarSrc = user.avatarSrc;
-        if(avatarSrc === "" || avatarSrc === null) {
-            avatar = (
-                <Avatar
-                    onClick={handleLogoutClick}
-                >T</Avatar>
-            );
-        } else {
-            avatar = (
-                <Avatar
-                    alt="T"
-                    src={user.avatarSrc}
-                    onClick={handleLogoutClick}
-                ></Avatar>
-            );
-        }
-        return avatar;
+        let nickname = '';
+        User.getUserInfo().then( myInfo => {
+            setUserInfo({
+                avatarUrl: myInfo.avatarUrl,
+                nickname: myInfo.nickname,
+                uid: myInfo.uid,
+            });
+        },
+        errMsg => {
+            alert(errMsg);
+            return false;
+        });
+        
+        return (
+            <Avatar
+                src={user.avatarUrl}
+                onClick={handleLogoutClick}
+            >{(userInfo.avatarUrl === '') && userInfo.nickname.substring(0,1)}</Avatar>
+        );
     }
     
     function renderGuest() {
