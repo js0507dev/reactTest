@@ -90,6 +90,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- TEST H2 DATABASE -->
+        <dependency>
+        	<groupId>com.h2database</groupId>
+        	<artifactId>h2</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

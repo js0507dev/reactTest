@@ -1,46 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, IconButton, Link } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import InputIcon from '@material-ui/icons/Input';
-import { Avatar, Link } from '@material-ui/core';
 
 import { useStyles } from './styles';
-import * as User from 'system/User/User';
+import UserAvatar from 'components/UserAvatar/UserAvatar';
 
 function Header(props) {
     const classes = useStyles();
-    const { isLoggedin, user, logout, open, toggleSideMenu } = props;
-    const [userInfo,setUserInfo] = useState({
-        avatarUrl: '',
-        nickname: '',
-        uid: '',
-    });
+    const { isLoggedin, logout, open, toggleSideMenu } = props;
     
     function handleLogoutClick() {
         logout();
     }
     function renderUser() {
-        let avatar = null;
-        let nickname = '';
-        User.getUserInfo().then( myInfo => {
-            setUserInfo({
-                avatarUrl: myInfo.avatarUrl,
-                nickname: myInfo.nickname,
-                uid: myInfo.uid,
-            });
-        },
-        errMsg => {
-            alert(errMsg);
-            return false;
-        });
-        
         return (
-            <Avatar
-                src={user.avatarUrl}
-                onClick={handleLogoutClick}
-            >{(userInfo.avatarUrl === '') && userInfo.nickname.substring(0,1)}</Avatar>
+            <UserAvatar
+                logout={handleLogoutClick}
+            />
         );
     }
     
@@ -53,7 +32,7 @@ function Header(props) {
     }
     
     let userBox = null;
-    if(user && isLoggedin) {
+    if(isLoggedin) {
         userBox = renderUser();
     } else {
         userBox = renderGuest();
@@ -68,10 +47,11 @@ function Header(props) {
                 <IconButton
                     aria-label="menu"
                     edge="start"
-                    className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
                     onClick={toggleSideMenu}
                 >
-                    <MenuIcon />
+                    <MenuIcon
+                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                    />
                 </IconButton>
                 <Typography
                     component="h1"

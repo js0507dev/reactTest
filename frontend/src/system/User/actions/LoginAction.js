@@ -1,7 +1,18 @@
 import axios from 'axios';
 
 export default function LoginAction(formData) {
+    //test
     return new Promise((resolve, reject) => {
+        const newUser = {
+            id: 8,
+            uid: 'test@naver.com',
+            roles: ['USER'],
+            token: 'test'
+        };
+        resolve(newUser);
+    });
+    
+    /*return new Promise((resolve, reject) => {
         axios({
             method: 'post',
             url:"http://localhost:8080/users/signin",
@@ -37,5 +48,5 @@ export default function LoginAction(formData) {
             }
             reject(msg);
         });
-    });
+    });*/
 }

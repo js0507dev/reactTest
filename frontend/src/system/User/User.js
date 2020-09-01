@@ -14,33 +14,33 @@ export const getLoginInfo = () => {
     return user;
 };
 
-export const login = ({uid,password,remember}) => {
+export async function login({uid,password,remember}) {
     //storage에 로그인정보 있는지 확인
     const oldUser = getLoginInfo();
     if(oldUser) {
-        return new Promise(( resolve => resolve(oldUser) ));
+        return oldUser;
     }
     
     const formData = new FormData();
     formData.append("uid",uid);
     formData.append("password",password);
     
-    return new Promise((resolve,reject) => {
-        LoginAction(formData)
-        .then( newUser => {
-            SessionStorage.setObjectItem('user',newUser);
+    try {
+        const newUser = await LoginAction(formData);
+    
+        SessionStorage.setObjectItem('user',newUser);
 
-            //로그인 유지 유무 확인
-            if(remember !== null && remember) {
-                LocalStorage.setObjectItem('user',newUser);
-            }
-            resolve(newUser);
-        },
-        errMsg => {
-            reject(errMsg);
-        });
-    });
-};
+        //로그인 유지 유무 확인
+        if(remember !== null && remember) {
+            LocalStorage.setObjectItem('user',newUser);
+        }
+        return newUser;
+    } catch(error) {
+        alert(error);
+    }
+    
+    return null;
+}
 
 export const logout = () => {
     SessionStorage.removeItem('user');

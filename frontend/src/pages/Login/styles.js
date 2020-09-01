@@ -17,4 +17,7 @@ export const useStyles = makeStyles((theme) => ({
     loginCheck: {
         fontSize: '10px',
     },
+    textField: {
+        color: theme.palette.primary.dark,
+    },
 }));

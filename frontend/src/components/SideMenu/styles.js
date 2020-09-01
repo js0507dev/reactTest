@@ -29,4 +29,10 @@ export const useStyles = makeStyles((theme) => ({
         padding: '0 8px',
         ...theme.mixins.toolbar,
     },
+    listItemText: {
+        color: theme.palette.grayScale[800],
+    },
+    searchTextField: {
+        margin: `0 ${theme.spacing(2)}px`,
+    },
 }));

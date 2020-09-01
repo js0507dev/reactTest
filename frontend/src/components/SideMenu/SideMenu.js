@@ -19,9 +19,9 @@ import BookIcon from '@material-ui/icons/Book';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import StarIcon from '@material-ui/icons/Star';
-import { green, red, blue, black } from '@material-ui/core/colors';
 
-import { useStyles } from './styles'
+import { useStyles } from './styles';
+import MenuList from './MenuList';
 
 function SideMenu(props) {
     const classes = useStyles();
@@ -39,24 +39,12 @@ function SideMenu(props) {
                 </IconButton>
             </div>
             <Divider />
-            <List>
-                <ListItem button>
-                    <ListItemIcon>
-                        <StarIcon style={{ color: blue[400] }} />
-                    </ListItemIcon>
-                    <ListItemText primary="베스트" color="primary" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <BookIcon style={{ color: green[500] }} />
-                    </ListItemIcon>
-                    <ListItemText primary="전체게시글" color="primary" />
-                </ListItem>
-            </List>
+            <MenuList />
             {open &&
                 <TextField
                     id="searchField"
                     label="Search..."
+                    className={classes.searchTextField}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="start">

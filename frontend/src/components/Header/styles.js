@@ -25,7 +25,7 @@ export const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     menuButton: {
-        color: theme.palette.primary.text,
+        color: 'white',
         marginRight: 36,
     },
     menuButtonHidden: {

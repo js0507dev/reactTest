@@ -1,7 +1,18 @@
 import axios from 'axios';
 
 export default function UserInfoAction(token, id) {
-    return new Promise((resolve, reject) => {
+    //test
+    return new Promise(resolve => {
+        const userInfo = {
+            nickname:'test',
+            uid:'test@naver.com',
+            avatarUrl:null,
+            id: 8
+        }
+        resolve(userInfo);
+    });
+    
+    /*return new Promise((resolve, reject) => {
         axios({
             method: 'get',
             url:`http://localhost:8080/users/${id}`,
@@ -27,5 +38,5 @@ export default function UserInfoAction(token, id) {
             }
             reject(msg);
         });
-    })
+    })*/
 }

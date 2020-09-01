@@ -123,6 +123,9 @@ function Login(props) {
                         helperText={uidState.isError ? uidState.errorMsg : ""}
                         onBlur={(e) => handleTextBlur(e)}
                         autoFocus
+                        InputProps={{
+                            className: classes.textField
+                        }}
                     />
                     <TextField
                         error={pwdState.isError}
@@ -149,7 +152,9 @@ function Login(props) {
                                     </IconButton>
                                 </InputAdornment>
                             ),
+                            className: classes.textField
                         }}
+                        className={classes.textField}
                     />
                     <FormControlLabel
                         control={<Checkbox name="remember" id="remember" value="remember" color="primary" fontSize="small" />}
