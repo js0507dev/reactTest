@@ -91,6 +91,13 @@
             </exclusions>
         </dependency>
         
+        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+		<dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>2.3.8</version>
+		</dependency>
+        
         <!-- TEST H2 DATABASE -->
         <dependency>
         	<groupId>com.h2database</groupId>

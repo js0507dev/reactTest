@@ -20,7 +20,7 @@ export default function ChildMenuItem(props) {
     
     return (
         <div>
-            <ListItem button onClick={() => {handleClick(url)}}>
+            <ListItem button onClick={() => {handleClick(url)}} className={classes.childMenuList}>
                 <ListItemIcon>
                     <MenuIcon knd={icon} />
                 </ListItemIcon>

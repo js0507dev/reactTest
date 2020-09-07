@@ -35,4 +35,7 @@ export const useStyles = makeStyles((theme) => ({
     searchTextField: {
         margin: `0 ${theme.spacing(2)}px`,
     },
+    childMenuList: {
+        marginLeft: theme.spacing(2),
+    },
 }));

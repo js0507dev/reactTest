@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default function LoginAction(formData) {
     //test
-    return new Promise((resolve, reject) => {
+    /*return new Promise((resolve, reject) => {
         const newUser = {
             id: 8,
             uid: 'test@naver.com',
@@ -10,12 +10,12 @@ export default function LoginAction(formData) {
             token: 'test'
         };
         resolve(newUser);
-    });
+    });*/
     
-    /*return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         axios({
             method: 'post',
-            url:"http://localhost:8080/users/signin",
+            url:"http://localhost:9550/users/signin",
             data: formData,
             headers: {
                 'Context-Type':'multipart/form-data;charset=utf-8',
@@ -48,5 +48,5 @@ export default function LoginAction(formData) {
             }
             reject(msg);
         });
-    });*/
+    });
 }

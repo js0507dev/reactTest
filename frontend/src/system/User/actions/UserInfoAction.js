@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default function UserInfoAction(token, id) {
     //test
-    return new Promise(resolve => {
+    /*return new Promise(resolve => {
         const userInfo = {
             nickname:'test',
             uid:'test@naver.com',
@@ -10,12 +10,12 @@ export default function UserInfoAction(token, id) {
             id: 8
         }
         resolve(userInfo);
-    });
+    });*/
     
-    /*return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         axios({
             method: 'get',
-            url:`http://localhost:8080/users/${id}`,
+            url:`http://localhost:9550/users/${id}`,
             headers: {
                 'Context-Type':'charset=utf-8',
                 'X-AUTH-TOKEN':token,
@@ -38,5 +38,5 @@ export default function UserInfoAction(token, id) {
             }
             reject(msg);
         });
-    })*/
+    })
 }
